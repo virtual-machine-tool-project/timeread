@@ -28,9 +28,8 @@ typedef unsigned char byte;
 typedef unsigned short word;
 typedef unsigned long dword;
 
-extern int srlInit(void);
+extern int srlInit(int port);
 extern int srlSend(int port, int character);
-extern int sriSendASCII(int port, int character);
 
 FILE *fOut;
 byte sOut;
@@ -42,6 +41,7 @@ byte comChar;
 
 int main(void)
 {
+	
 	printf("\nSpecify COM port (1-4)");
 	comInp = getch();
 	if(comInp == '1')
@@ -65,6 +65,7 @@ int main(void)
 		printf("\nError 1");
 		return -1;
 	}
+	srlInit(comPort);
 	printf("\nSelect mode (s) to send, (r) to receive");
 	comInp = getch();
 	if(comInp == 'S'||comInp == 's')
@@ -72,7 +73,7 @@ int main(void)
 		printf("\nSpecify char to send (in hex)");
 		scanf("%x",&comInp);
 		sOut = comInp;
-		outportb(comPort,comChar);
+		srlSend(comPort,(int)sOut);
 		printf("\nSent data from COM port 0x%X",comPort);
 	}
 	else if(comInp == 'R'||comInp == 'r')
