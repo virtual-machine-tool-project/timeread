@@ -14,3 +14,7 @@ Well, it uses something called Tunnel Injection for saving, and Tunnel Release f
 
 ### Is vertical NAND the same as a normal NAND?
 Yes, the only difference is that addressing memory is now vertical.
+
+### Any useful resource?
+Yes
+https://www.csd.uoc.gr/~hy428/reading/tn2919.pdf (Page 3,5-27) (Example assembly code on page 23)
