@@ -16,5 +16,6 @@ Well, it uses something called Tunnel Injection for saving, and Tunnel Release f
 Yes, the only difference is that addressing memory is now vertical.
 
 ### Any useful resource?
-Yes
 https://www.csd.uoc.gr/~hy428/reading/tn2919.pdf (Page 3,5-27) (Example assembly code on page 23)
+http://www2.lauterbach.com/pdf/nandflash.pdf (Page 7-86) (Script **.cmm** example files on pages 12,15-18,22,23,28,31,33,34,36-48,50-59)
+https://www.xeltek.com/resources/technical-articles/memory-device-types/nand-flash-programming/ (Explains the basics)
