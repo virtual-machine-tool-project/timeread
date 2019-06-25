@@ -23,10 +23,7 @@ SOFTWARE.
 #include <stdlib.h>
 #include <dos.h>
 #include <conio.h>
-
-typedef unsigned char byte;
-typedef unsigned short word;
-typedef unsigned long dword;
+#include "lib/istdas.h"
 
 extern int srlInit(int port);
 extern int srlSend(int port, int character);
@@ -34,7 +31,6 @@ extern int srlSend(int port, int character);
 FILE *fOut;
 byte sOut;
 signed char commandArg;
-dword comPort;
 byte comInp;
 int comIntInp;
 byte comChar;
