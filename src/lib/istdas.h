@@ -23,6 +23,7 @@ SOFTWARE.
 #if defined (__TINY__) || defined (__SMALL__)
 #error Please use a larger model.
 #endif
+#include "istdas.c"
 
 typedef unsigned char byte;
 typedef unsigned short word;
