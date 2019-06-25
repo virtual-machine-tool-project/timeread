@@ -28,7 +28,7 @@ SOFTWARE.
 typedef unsigned char byte;
 typedef unsigned short word;
 
-size_t strlet(char * string, char letter,size_t scan);
-size_t strlenf(char * string);
+size_t _Cdecl strlet(char * string, char letter,size_t scan);
+size_t _Cdecl strlenf(char * string);
 
 #endif
