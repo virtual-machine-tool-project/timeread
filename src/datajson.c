@@ -24,35 +24,58 @@ SOFTWARE.
 
 FILE *fIn;
 FILE *fOut;
+FILE *fTextOut;
 
-int dataBuffer;
-unsigned int offset;
+word dataBuffer;
+byte * secondBuffer;
+byte textSignal;
+unsigned int sizeOfFile;
+unsigned int offset,sOffset;
+unsigned int i;
+const char* coCo[32] =
+{
+    "NUL","SOH","STX","ETX","ENT","ENQ","ACK","BEL","BS","TAB","LF","VT","FF","CR","SO","SI","DLE",
+    "DC1","DC2","DC3","DC4","NAK","SYN","ETB","CAN","EM","SUB","ESC","FS","GS","RS","US",
+};
 
 int main(int argc, char * argv[])
 {
-    if(argc < 2)
+    if(argc != 2)
     {
-        printf("Usage: -inputfile -outputfile\n");
-        return 0;
-    }
-    if(argc > 3)
-    {
-        printf("Too many arguments supplied\n");
-        return 0;
+        printf("Usage: inputfile\n");
+        return -2;
     }
     offset = 1;
     fIn = fopen(argv[1],"rb");
-    fOut = fopen(argv[2],"wb");
+    if(!fIn)
+    {
+        return -3;
+    }
+    fOut = fopen("out.json","wb");
+    fTextOut = fopen("txtout.json","wb");
     fprintf(fOut,"{\n");
+    fprintf(fTextOut,"{\n");
+    printf("Writing JSON head\n");
+    textSignal = 0;
+    secondBuffer = malloc(4096);
+    if(secondBuffer == NULL)
+    {
+        return -1;
+    }
+    sizeOfFile = 0;
+    while(getc(fIn) != EOF)
+    {
+        sizeOfFile++;
+    }
+    if(fseek(fIn,0,SEEK_SET) != 0)
+    {
+        return -4;
+    }
     // For every read char make a registry
-    while(dataBuffer != EOF)
+    while(offset < sizeOfFile+1)
     {
         // wrtie
-        if(offset < 2)
-        {
-            dataBuffer = getc(fIn);
-            offset++;
-        }
+        if(offset < 2){ /*Do nothing*/ }
         else
         {
             fprintf(fOut,"\t\x22%u\x22\n",offset-2);
@@ -69,116 +92,57 @@ int main(int argc, char * argv[])
             }
             else
             {
-                switch(dataBuffer)
+                for(i = 0; i < 32; i++)
                 {
-                case 0:
-                    fprintf(fOut,"NUL");
-                    break;
-                case 1:
-                    fprintf(fOut,"SOH");
-                    break;
-                case 2:
-                    fprintf(fOut,"STX");
-                    break;
-                case 3:
-                    fprintf(fOut,"ETX");
-                    break;
-                case 4:
-                    fprintf(fOut,"ENT");
-                    break;
-                case 5:
-                    fprintf(fOut,"ENQ");
-                    break;
-                case 6:
-                    fprintf(fOut,"ACK");
-                    break;
-                case 7:
-                    fprintf(fOut,"BEL");
-                    break;
-                case 8:
-                    fprintf(fOut,"BS");
-                    break;
-                case 9:
-                    fprintf(fOut,"TAB");
-                    break;
-                case 10:
-                    fprintf(fOut,"LF");
-                    break;
-                case 11:
-                    fprintf(fOut,"VT");
-                    break;
-                case 12:
-                    fprintf(fOut,"FF");
-                    break;
-                case 13:
-                    fprintf(fOut,"CR");
-                    break;
-                case 14:
-                    fprintf(fOut,"SO");
-                    break;
-                case 15:
-                    fprintf(fOut,"SI");
-                    break;
-                case 16:
-                    fprintf(fOut,"DLE");
-                    break;
-                case 17:
-                    fprintf(fOut,"DC1");
-                    break;
-                case 18:
-                    fprintf(fOut,"DC2");
-                    break;
-                case 19:
-                    fprintf(fOut,"DC3");
-                    break;
-                case 20:
-                    fprintf(fOut,"DC4");
-                    break;
-                case 21:
-                    fprintf(fOut,"NAK");
-                    break;
-                case 22:
-                    fprintf(fOut,"SYN");
-                    break;
-                case 23:
-                    fprintf(fOut,"ETB");
-                    break;
-                case 24:
-                    fprintf(fOut,"CAN");
-                    break;
-                case 25:
-                    fprintf(fOut,"EM");
-                    break;
-                case 26:
-                    fprintf(fOut,"SUB");
-                    break;
-                case 27:
-                    fprintf(fOut,"ESC");
-                    break;
-                case 28:
-                    fprintf(fOut,"FS");
-                    break;
-                case 29:
-                    fprintf(fOut,"GS");
-                    break;
-                case 30:
-                    fprintf(fOut,"RS");
-                    break;
-                case 31:
-                    fprintf(fOut,"US");
-                    break;
+                    if(dataBuffer == i)
+                    {
+                        fprintf(fOut,"%s",coCo[i]);
+                    }
                 }
+            }
+            if(dataBuffer == 2)
+            {
+                fread(&dataBuffer,1,1,fIn);
+                if(dataBuffer > 31)
+                {
+                    sOffset = 0;
+                    textSignal = 1;
+                }
+            }
+            if(dataBuffer == 3)
+            {
+                fprintf(fTextOut,"\t\x22%u\x22\n",offset-2);
+                fprintf(fTextOut,"\t{\n");
+                fprintf(fTextOut,"\t\t\x22");
+                fprintf(fTextOut,"string\x22:\x22");
+                for(i = 0; i < sOffset; i++)
+                {
+                    fprintf(fTextOut,"%c",secondBuffer[i]);
+                }
+                fprintf(fTextOut,"\x22\n");
+                fprintf(fTextOut,"\t}\n");
+                sOffset = 0;
+                textSignal = 0;
             }
             fprintf(fOut,"\x22\n");
             fprintf(fOut,"\t}\n");
             // read
-            dataBuffer = getc(fIn);
-            offset++;
+            if(textSignal == 1&&dataBuffer > 31)
+            {
+                secondBuffer[sOffset] = dataBuffer;
+                sOffset++;
+            }
         }
+        printf("Writing %d registry (0x%x)\r",offset-2,dataBuffer);
+        fread(&dataBuffer,1,1,fIn);
+        offset++;
     }
     fprintf(fOut,"}");
+    fprintf(fTextOut,"}");
     fclose(fIn);
     fclose(fOut);
-    printf("Finished\n");
+    fclose(fTextOut);
+    free(secondBuffer);
+    printf("\nFinished\n");
     return 0;
 }
