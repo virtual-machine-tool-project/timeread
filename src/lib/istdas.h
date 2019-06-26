@@ -20,13 +20,15 @@ SOFTWARE.
 
 #ifndef ISTDAS_H
 #define ISTDAS_H
-#if defined (__TINY__) || defined (__SMALL__)
+#if defined (__TINY__)
 #error Please use a larger model.
 #endif
 #include "istdas.c"
 
 typedef unsigned char byte;
 typedef unsigned short word;
+typedef unsigned long dword;
+typedef unsigned long long qword;
 
 size_t _Cdecl strlet(char * string, char letter,size_t scan);
 size_t _Cdecl strlenf(char * string);
