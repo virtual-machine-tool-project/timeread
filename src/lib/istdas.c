@@ -22,7 +22,7 @@ SOFTWARE.
 #define ISTDAS_C
 
 /*Faster version of strlen*/
-size_t strlenf(char * string)
+size_t _Cdecl strlenf(char * string)
 {
 	register size_t a;
 	while(!(string[a] == 0))
@@ -33,7 +33,7 @@ size_t strlenf(char * string)
 }
 
 /*Get how many letters are in an array of characters*/
-size_t strlet(char * string, char letter)
+size_t _Cdecl strlet(char * string, char letter)
 {
 	register unsigned int a;
 	register unsigned int b = 0;
