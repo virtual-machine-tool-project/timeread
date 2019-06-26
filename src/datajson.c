@@ -20,6 +20,7 @@ SOFTWARE.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "lib/istdas.h"
 
 FILE *fIn;
@@ -29,9 +30,9 @@ FILE *fTextOut;
 word dataBuffer;
 byte * secondBuffer;
 byte textSignal;
-unsigned int sizeOfFile;
-unsigned int offset,sOffset;
-unsigned int i;
+uint32_t sizeOfFile;
+uint32_t offset,sOffset;
+uint32_t i;
 const char* coCo[32] =
 {
     "NUL","SOH","STX","ETX","ENT","ENQ","ACK","BEL","BS","TAB","LF","VT","FF","CR","SO","SI","DLE",
