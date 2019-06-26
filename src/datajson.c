@@ -23,16 +23,19 @@ SOFTWARE.
 #include <stdint.h>
 #include "lib/istdas.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
 FILE *fIn;
 FILE *fOut;
-FILE *fTextOut;
 
-word dataBuffer;
+byte dataBuffer;
 byte * secondBuffer;
 byte textSignal;
 uint32_t sizeOfFile;
-uint32_t offset,sOffset;
-uint32_t i;
+uint32_t offset,sOffset,numNot;
+unsigned int i;
 const char* coCo[32] =
 {
     "NUL","SOH","STX","ETX","ENT","ENQ","ACK","BEL","BS","TAB","LF","VT","FF","CR","SO","SI","DLE",
@@ -53,9 +56,7 @@ int main(int argc, char * argv[])
         return -3;
     }
     fOut = fopen("out.json","wb");
-    fTextOut = fopen("txtout.json","wb");
     fprintf(fOut,"{\n");
-    fprintf(fTextOut,"{\n");
     printf("Writing JSON head\n");
     textSignal = 0;
     secondBuffer = malloc(4096);
@@ -73,7 +74,7 @@ int main(int argc, char * argv[])
         return -4;
     }
     // For every read char make a registry
-    while(offset < sizeOfFile+1)
+    while(offset < sizeOfFile+3)
     {
         // wrtie
         if(offset < 2){ /*Do nothing*/ }
@@ -101,48 +102,17 @@ int main(int argc, char * argv[])
                     }
                 }
             }
-            if(dataBuffer == 2)
-            {
-                fread(&dataBuffer,1,1,fIn);
-                if(dataBuffer > 31)
-                {
-                    sOffset = 0;
-                    textSignal = 1;
-                }
-            }
-            if(dataBuffer == 3)
-            {
-                fprintf(fTextOut,"\t\x22%u\x22\n",offset-2);
-                fprintf(fTextOut,"\t{\n");
-                fprintf(fTextOut,"\t\t\x22");
-                fprintf(fTextOut,"string\x22:\x22");
-                for(i = 0; i < sOffset; i++)
-                {
-                    fprintf(fTextOut,"%c",secondBuffer[i]);
-                }
-                fprintf(fTextOut,"\x22\n");
-                fprintf(fTextOut,"\t}\n");
-                sOffset = 0;
-                textSignal = 0;
-            }
             fprintf(fOut,"\x22\n");
             fprintf(fOut,"\t}\n");
             // read
-            if(textSignal == 1&&dataBuffer > 31)
-            {
-                secondBuffer[sOffset] = dataBuffer;
-                sOffset++;
-            }
         }
-        printf("Writing %d registry (0x%x)\r",offset-2,dataBuffer);
+        printf("Writing %d registry entry of %d. (0x%x)\r",offset-2,sizeOfFile,dataBuffer);
         fread(&dataBuffer,1,1,fIn);
         offset++;
     }
     fprintf(fOut,"}");
-    fprintf(fTextOut,"}");
     fclose(fIn);
     fclose(fOut);
-    fclose(fTextOut);
     free(secondBuffer);
     printf("\nFinished\n");
     return 0;
