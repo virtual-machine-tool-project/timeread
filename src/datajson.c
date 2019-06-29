@@ -1,4 +1,6 @@
-/*Gets data from memory
+/*Gets data from file and transforms it into an structured
+- HTML
+- JSON
 By Jesus A. Diaz*/
 
 #include <stdio.h>
