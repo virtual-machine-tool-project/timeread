@@ -1,3 +1,6 @@
+/*Gets data from memory
+By Jesus A. Diaz*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef __TURBOC__
