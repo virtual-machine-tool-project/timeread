@@ -9,13 +9,14 @@ By Jesus A. Diaz*/
 #include <stdint.h>
 #endif
 #include <string.h>
+#include "lib/istdas.h"
 
 FILE *fIn;
 FILE *fOut;
 
-unsigned char dataBuffer;
-unsigned char* secondBuffer;
-unsigned char textSignal;
+byte dataBuffer;
+byte * secondBuffer;
+byte textSignal;
 
 #ifndef __TURBOC__
 uint32_t sizeOfFile;
