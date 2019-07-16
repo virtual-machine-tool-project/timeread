@@ -25,9 +25,21 @@ SOFTWARE.
 #endif
 #include "istdas.c"
 
+/*Base address - in BIOS data range*/
+#define COM1_BASE_ADDRESS 0x00000400
+#define COM2_BASE_ADDRESS 0x00000402
+#define COM3_BASE_ADDRESS 0x00000404
+#define COM4_BASE_ADDRESS 0x00000406
+#define LPT1_BASE_ADDRESS 0x00000408
+#define LPT2_BASE_ADDRESS 0x0000040A
+#define LPT3_BASE_ADDRESS 0x0000040C
+#define LPT4_BASE_ADDRESS 0x0000040E
+
 typedef unsigned char byte;
 typedef unsigned short word;
 typedef unsigned long dword;
 typedef unsigned long long qword;
+
+typedef struct 
 
 #endif
