@@ -30,7 +30,4 @@ typedef unsigned short word;
 typedef unsigned long dword;
 typedef unsigned long long qword;
 
-size_t _Cdecl strlet(char * string, char letter,size_t scan);
-size_t _Cdecl strlenf(char * string);
-
 #endif
