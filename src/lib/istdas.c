@@ -21,30 +21,6 @@ SOFTWARE.
 #ifndef ISTDAS_C
 #define ISTDAS_C
 
-/*Faster version of strlen*/
-size_t _Cdecl strlenf(char * string)
-{
-	register size_t a;
-	while(!(string[a] == 0))
-	{
-		a++;
-	}
-	return a;
-}
 
-/*Get how many letters are in an array of characters*/
-size_t _Cdecl strlet(char * string, char letter)
-{
-	register unsigned int a;
-	register unsigned int b = 0;
-	for(a = 0; a < strlenf(string); a++)
-	{
-		if(string[a] == letter)
-		{
-			result++;
-		}
-	}
-	return b;
-}
 
 #endif
