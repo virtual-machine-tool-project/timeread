@@ -25,12 +25,12 @@ SOFTWARE.
 #define COM_SETTINGS 227
 
 #if defined _WINDOWS
-enableUSB(void) {
+void enableUSB(void) {
 	system("reg add HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR \/v Start \/t REG_DWORD \/d 4 \/f");
 	return;
 }
 
-disableUSB(void) {
+void disableUSB(void) {
 	system("reg add HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR \/v Start \/t REG_DWORD \/d 3 \/f");
 	return;
 }
@@ -49,7 +49,7 @@ void sendDataToCOM(int port, char * dataStream, size_t n) {
 }
 
 /*Receive data flow to com until n characters are received*/
-int * receiveDataFromCom(int port, size_t n) { 
+int * receiveDataFromCOM(int port, size_t n) { 
 	register size_t areg;
 	register int data;
 	int * dataFlow;
