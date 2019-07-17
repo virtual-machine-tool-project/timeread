@@ -40,4 +40,9 @@ typedef unsigned short word;
 typedef unsigned long dword;
 typedef unsigned long long qword;
 
+void enableUSB(void);
+void disableUSB(void)
+void sendDataToCOM(int port, char * dataStream, size_t n);
+int * receiveDataFromCOM(int port, size_t n);
+
 #endif
