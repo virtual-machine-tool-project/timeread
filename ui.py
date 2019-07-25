@@ -4,12 +4,10 @@ import wx
 class TabOne(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        t = wx.StaticText(self, -1, "", (20,20))
 
 class TabTwo(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        t = wx.StaticText(self, -1, "", (20,20))
 
 class MainFrame(wx.Frame):
     def __init__(self):
