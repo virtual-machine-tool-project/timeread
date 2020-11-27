@@ -8,3 +8,21 @@ wireless remote controlling. So hence, in essence, it's obviously not traditiona
 but rather, it's (as was phrased in a single article about 2 of the topics that we’ll be covering with doing this project)
 “data recovery in the digital forensic sense”, most of all, this said exact 
 VMT’s supposed to be compatible with LITERALLY ANY & EVERYTHING (NAND) flash memory, like SSDs, USBs, etc.
+
+## nandtool usage
+nandtool basically times between reads and finds anomalies for you(TM). And you just grab the data.
+
+You run nandtool like this: `sudo ./nandtool /dev/path outfile.txt`
+
+/dev/path - This is the device path of your USB stick or NAND thing, use `ls /dev/sd*` to find devices. (do not use sd's with numbers after them, they are partitions not devices!!!)
+
+outfile.txt - Basically you tell nandtool where to store the data it got (put something or nandtool will segfault)
+
+The generated data is in the format `cell_no::degeneration factor (newline)`. An example file here:
+```c
+1::1.0
+2::1.6
+3::2.0
+...
+```
+And so on, check for EOF when reading file, nandtool does not give you clues where it ends, nandtool does what it wants.
