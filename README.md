@@ -12,13 +12,18 @@ VMT’s supposed to be compatible with LITERALLY ANY & EVERYTHING (NAND) flash m
 ## nandtool usage
 nandtool basically times between reads and finds anomalies for you(TM). And you just grab the data.
 
-You run nandtool like this: `sudo ./nandtool /dev/path outfile.txt`
+You run nandtool like this: `sudo ./nandtool -dev /dev/sdb -d deg_report.txt -a cells.txt`
 
-/dev/path - This is the device path of your USB stick or NAND thing, use `ls /dev/sd*` to find devices. (do not use sd's with numbers after them, they are partitions not devices!!!)
+Options:
 
-outfile.txt - Basically you tell nandtool where to store the data it got (put something or nandtool will segfault)
+* -dev [devpath] : specify the device path of the NAND usb
+* -d [file] : Output degenerancy report to file
+* -a [file] : Output cells values (as is) to a file (binary, hex, each is a byte)
+* -e [numb] : Set how many cells we analyze, default it's 4096.
 
-The generated data is in the format `cell_no::degeneration factor (newline)`. An example file here:
+All options are evaluated and run as they are given, so you can use the -e option to analyze 16320 cells for degenerancy and 32220 cells for raw output.
+
+The generated data (for degeneration) is in the format `cell_no::degeneration factor (newline)`. An example file here:
 ```c
 1::1.0
 2::1.6
